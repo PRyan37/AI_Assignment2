@@ -38,24 +38,27 @@ def draw_graph(graph, colors, title):
 def improve_colors(graph, colors_set, conflicting_corners, num_colors):
     new_colors = colors_set.copy()
 
-    for node in conflicting_corners:
-        best_colors = []
-        min_conflicts = float('inf')
+    if not conflicting_corners:
+        return new_colors
 
-        for color in range(num_colors):
-            local_conflicts = 0
-            for neighbor in graph.neighbors(node):
-                if new_colors[neighbor] == color:
-                    local_conflicts += 1
+    node = random.choice(conflicting_corners)
+    best_colors = []
+    min_conflicts = float('inf')
 
-            if local_conflicts < min_conflicts:
-                min_conflicts = local_conflicts
-                best_colors = [color]
-            elif local_conflicts == min_conflicts:
-                best_colors.append(color)
+    for color in range(num_colors):
+        local_conflicts = 0
+        for neighbor in graph.neighbors(node):
+            if new_colors[neighbor] == color:
+                local_conflicts += 1
 
-        best_color = random.choice(best_colors)
-        new_colors[node] = best_color
+        if local_conflicts < min_conflicts:
+            min_conflicts = local_conflicts
+            best_colors = [color]
+        elif local_conflicts == min_conflicts:
+            best_colors.append(color)
+
+    best_color = random.choice(best_colors)
+    new_colors[node] = best_color
 
     return new_colors
 
@@ -78,7 +81,7 @@ for c in num_colors_list:
     print("Conflicting nodes:", conflicting_nodes)
     print("Conflicting pairs:", conflicting_pairs)
 
-    for i in range(10):
+    for i in range(500):
         random_colors = improve_colors(R, random_colors, conflicting_nodes, c)
         num_conflicts, conflicting_nodes, conflicting_pairs = count_conflicts(R, random_colors)
         num_conflicts_list.append(num_conflicts)
