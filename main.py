@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import random
 
 nodes = 100
-probability = 0.09
+probability = 0.16
 
 def assign_random_colors(graph, number_of_colors):
     colors = [0] * graph.number_of_nodes()
@@ -39,7 +39,7 @@ def improve_colors(graph, colors_set, conflicting_corners, num_colors):
     new_colors = colors_set.copy()
 
     for node in conflicting_corners:
-        best_color = colors_set[node]
+        best_colors = []
         min_conflicts = float('inf')
 
         for color in range(num_colors):
@@ -50,15 +50,18 @@ def improve_colors(graph, colors_set, conflicting_corners, num_colors):
 
             if local_conflicts < min_conflicts:
                 min_conflicts = local_conflicts
-                best_color = color
+                best_colors = [color]
+            elif local_conflicts == min_conflicts:
+                best_colors.append(color)
 
+        best_color = random.choice(best_colors)
         new_colors[node] = best_color
 
     return new_colors
 
 num_colors_list = [2, 4, 6, 8,10,12,14,16]
 all_results = []
-lowest_c_with_zero_conflicts = num_colors_list[-1]
+lowest_c_with_zero_conflicts = int(1e9)  # A large number to track the lowest c that achieves zero conflicts
 R = nx.gnp_random_graph(nodes, probability)
 nx.draw(R, with_labels=True)
 
@@ -93,7 +96,10 @@ for c in num_colors_list:
     })
 
 plt.figure(figsize=(12, 8))
-print("\nLowest number of colors that reached 0 conflicts:", lowest_c_with_zero_conflicts)
+if lowest_c_with_zero_conflicts == int(1e9):
+    print("\nNo number of colors in the tested range achieved 0 conflicts.")
+else:
+    print("\nLowest number of colors that reached 0 conflicts:", lowest_c_with_zero_conflicts)
 for result in all_results:
     iterations = list(range(1, len(result["conflicts"]) + 1))
     label = f'c={result["c"]}'
