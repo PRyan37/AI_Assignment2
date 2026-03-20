@@ -77,6 +77,8 @@ def improve_colors(graph, colors_set, conflicting_corners, num_colors):
     return new_colors
 
 
+#TESTING PHASE
+
 # List of different numbers of colors to test
 num_colors_list = [2, 4, 6, 8,10,12,14,16]
 all_results = []
@@ -93,6 +95,8 @@ for c in num_colors_list:
     num_conflicts_list = []
 
     random_colors = assign_random_colors(R, c)
+
+
     improved_colors=random_colors
     num_conflicts, conflicting_nodes, conflicting_pairs = count_conflicts(R, random_colors)
     num_conflicts_list.append(num_conflicts)
@@ -117,14 +121,18 @@ for c in num_colors_list:
         "c": c,
         "conflicts": num_conflicts_list
     })
+    #graph the final color map for the current number of colors
+    draw_graph(R, improved_colors, ("Final Color Assignment for ", c, " Colors"))
 
-plt.figure(figsize=(12, 8))
+#EVALUATION PHASE
 
 if lowest_c_with_zero_conflicts == int(1e9):
     print("\nNo number of colors in the tested range achieved 0 conflicts.")
 else:
     print("\nLowest number of colors that reached 0 conflicts:", lowest_c_with_zero_conflicts)
-    
+
+
+plt.figure(figsize=(12, 8))
 for result in all_results:
     iterations = list(range(1, len(result["conflicts"]) + 1))
     label = f'c={result["c"]}'
