@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import random
 
 nodes = 100
-probability = 0.08
+probability = 0.09
 
 def assign_random_colors(graph, number_of_colors):
     colors = [0] * graph.number_of_nodes()
@@ -45,7 +45,7 @@ def improve_colors(graph, colors_set, conflicting_corners, num_colors):
         for color in range(num_colors):
             local_conflicts = 0
             for neighbor in graph.neighbors(node):
-                if colors_set[neighbor] == color:
+                if new_colors[neighbor] == color:
                     local_conflicts += 1
 
             if local_conflicts < min_conflicts:
@@ -56,15 +56,15 @@ def improve_colors(graph, colors_set, conflicting_corners, num_colors):
 
     return new_colors
 
-num_colors_list = [2, 3, 4, 5, 6, 7, 8]
+num_colors_list = [2, 4, 6, 8,10,12,14,16]
 all_results = []
-
+lowest_c_with_zero_conflicts = num_colors_list[-1]
 R = nx.gnp_random_graph(nodes, probability)
 nx.draw(R, with_labels=True)
 
 
 for c in num_colors_list:
-    print("\nGenerating graph with c =", c)
+    print("\n---------------Generating graph with ", c," colors------------------\n")
     num_conflicts_list = []
 
     random_colors = assign_random_colors(R, c)
@@ -80,17 +80,20 @@ for c in num_colors_list:
         num_conflicts, conflicting_nodes, conflicting_pairs = count_conflicts(R, random_colors)
         num_conflicts_list.append(num_conflicts)
 
-        print(f"Iteration {i + 1} - Number of conflicts: {num_conflicts}")
-        print(f"Iteration {i + 1} - Conflicting nodes: {conflicting_nodes}")
-        print(f"Iteration {i + 1} - Conflicting pairs: {conflicting_pairs}")
+        if num_conflicts ==0:
+            if c < lowest_c_with_zero_conflicts :
+                lowest_c_with_zero_conflicts = c
 
+
+
+    print("Number of conflicts over iterations:", num_conflicts_list)
     all_results.append({
         "c": c,
         "conflicts": num_conflicts_list
     })
 
 plt.figure(figsize=(12, 8))
-
+print("\nLowest number of colors that reached 0 conflicts:", lowest_c_with_zero_conflicts)
 for result in all_results:
     iterations = list(range(1, len(result["conflicts"]) + 1))
     label = f'c={result["c"]}'
