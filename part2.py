@@ -150,18 +150,3 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.grid(True)
 plt.tight_layout()
 plt.show()
-
-
-#2D lattice/ Grid Graph
-# grid = nx.grid_2d_graph(7, 7)
-# gridGraph = nx.convert_node_labels_to_integers(grid)
-# draw_graph(gridGraph, random_colors, "Grid Graph")
-#
-# #Ring/Cycle Graph
-# cycleGraph = nx.cycle_graph(R)
-# draw_graph(cycleGraph, random_colors, "Cycle Graph")
-#
-#
-# #Random Geometric Graph
-# closeGraph = nx.random_geometric_graph(R, radius=0.2)
-# draw_graph(closeGraph, random_colors, "Close Graph")
