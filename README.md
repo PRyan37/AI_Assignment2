@@ -1,5 +1,7 @@
 # Graph Colouring Assignment
 
+## Andrew Costello (22424842) and Padraig Ryan (22486174)  
+
 This project implements a local search (hill climbing) approach to solve the graph colouring problem using Erdős–Rényi random graphs.
 
 ## Files
